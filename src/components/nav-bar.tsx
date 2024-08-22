@@ -13,11 +13,12 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
-import todoAppLogo from "../assets/todoAppLogo.svg";
-const pages = ["Rooms", "Tasks", "About"];
+import todoAppLogo from "../assets/todo-app-logo.svg";
+import { linkStyle as linkStyleNormalText } from "../utils/link-style";
+const pages = [{ name: "Rooms", link: "/rooms" }, { name: "Tasks", link: "/tasks" }, { name: "Home", link: "/home" }, { name: "About", link: "/about" }];
 const settings = [{ name: "Logout", link: "/sign-in" }];
 
-function ResponsiveAppBar() {
+function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null,
   );
@@ -45,10 +46,7 @@ function ResponsiveAppBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const linkStyle = {
-    textDecoration: "none",
-    color: "white",
-  };
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -85,8 +83,8 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -113,11 +111,13 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                component={Link}
+                key={page.name}
                 onClick={handleCloseNavMenu}
+                to={page.link}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>
@@ -149,7 +149,7 @@ function ResponsiveAppBar() {
                   key={setting["name"]}
                   onClick={(event) => handleMenuItemClick(event, index)}
                 >
-                  <Link to={setting["link"]} style={linkStyle}>
+                  <Link to={setting["link"]} style={linkStyleNormalText}>
                     {setting["name"]}
                   </Link>
                 </MenuItem>
@@ -161,4 +161,4 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
-export default ResponsiveAppBar;
+export default NavBar;

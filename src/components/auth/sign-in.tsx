@@ -14,17 +14,19 @@ import Container from '@mui/material/Container';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { Link as RouterLink } from 'react-router-dom';
+
 
 function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" component={RouterLink} to='/home'>
         Your Website
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
-    </Typography>
+    </Typography >
   );
 }
 
@@ -120,12 +122,12 @@ export default function SignIn() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link component={RouterLink} to='/home' >
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link component={RouterLink} to='/home' >
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

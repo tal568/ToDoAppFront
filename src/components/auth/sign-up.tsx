@@ -14,6 +14,8 @@ import Container from "@mui/material/Container";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import { Link as RouterLink } from 'react-router-dom';
+
 
 function Copyright(props: any) {
   return (
@@ -191,7 +193,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link component={RouterLink} to='/sign-in' variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
