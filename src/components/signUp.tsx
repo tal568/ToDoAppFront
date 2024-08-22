@@ -11,7 +11,10 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+
 
 function Copyright(props: any) {
   return (
@@ -25,18 +28,31 @@ function Copyright(props: any) {
     </Typography>
   );
 }
-
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+type signInFormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+};
 
 export default function SignUp() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const validationSchema:Yup.ObjectSchema<signInFormData> = 
+    Yup.object().shape({
+      firstName: Yup.string().required('First Name is required').max(15, 'Must be 15 characters or less').min(3, 'Must be 3 characters or more'),
+      lastName: Yup.string().required('Last Name is required').max(20, 'Must be 20 characters or less').min(3, 'Must be 3 characters or more'),
+        email: Yup.string().email('Email is invalid').required('Email is required'),
+        password: Yup.string()
+          .min(6, 'Password must be at least 6 characters')
+          .required('Password is required')
+  }
+  ).required();
+
+  const { control, handleSubmit, formState: { errors }, setError, reset } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
+  const onSubmit = (data: signInFormData) => {
+    console.log(data);
+    reset();
   };
 
   return (
@@ -57,49 +73,24 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
+              <Controller control={control} name="firstName" render={({ field }) => <TextField autoComplete="given-name"  label="First Name" fullWidth id='firstName'autoFocus {...field} error={Boolean(errors.firstName)} helperText={errors.firstName?.message} />}/>
+
+  
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
+              <Controller control={control} name="lastName" render={({ field }) => <TextField  label="Last Name" fullWidth id='lastName' required  autoComplete='family-name' {...field} error={Boolean(errors.lastName)} helperText={errors.lastName?.message} />} />
+
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
+                <Controller control={control} name="email" render={({ field }) => <TextField  label="Email Address" fullWidth id='email' required {...field} autoComplete='email' name='email' error={Boolean(errors.email)} helperText={errors.email?.message} />} />
+
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
+                <Controller control={control}  name="password" render={({ field }) => <TextField  required  fullWidth  label="Password" type="password" id="password"  autoComplete="new-password"{...field} error={Boolean(errors.password)} helperText={errors.password?.message} />}/>
+
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel

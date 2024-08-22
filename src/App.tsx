@@ -1,7 +1,7 @@
-import SignIn from './shared/signIn';
-import SignUp from './shared/signUp';
+import SignIn from './components/signIn';
+import SignUp from './components/signUp';
  import {createBrowserRouter } from 'react-router-dom';
-import ResponsiveAppBar from './shared/navBar';
+import ResponsiveAppBar from './components/navBar';
 const router = createBrowserRouter([
   {path:"/",
   element: <ResponsiveAppBar />
