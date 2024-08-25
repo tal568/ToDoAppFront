@@ -3,7 +3,8 @@ import SignUp from "./components/auth/sign-up";
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import NavBar from "./components/nav-bar";
 import Home from "./components/home/home";
-
+import NotFound from "./components/not-found";
+import React from "react";
 
 const NavBarWithOutlet = () => (
   <>
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "*",
+    element: <NotFound />
+  }
 ]);
 
 export default router;
