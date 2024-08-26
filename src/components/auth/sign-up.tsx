@@ -15,7 +15,9 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { Link as RouterLink } from 'react-router-dom';
-import axios, { Axios } from "axios";
+import axios from "axios";
+import Cookies from "js-cookie";
+axios.defaults.withCredentials = true;
 
 function Copyright(props: any) {
   return (
@@ -35,29 +37,29 @@ function Copyright(props: any) {
   );
 }
 type signInFormData = {
-  firstName: string;
-  lastName: string;
+  username: string;
   email: string;
-  password: string;
+  password1: string;
+  password2: string;
+
 };
 
 export default function SignUp() {
   const validationSchema: Yup.ObjectSchema<signInFormData> = Yup.object()
     .shape({
-      firstName: Yup.string()
-        .required("First Name is required")
-        .max(15, "Must be 15 characters or less")
-        .min(3, "Must be 3 characters or more"),
-      lastName: Yup.string()
-        .required("Last Name is required")
-        .max(20, "Must be 20 characters or less")
-        .min(3, "Must be 3 characters or more"),
+
+
       email: Yup.string()
         .email("Email is invalid")
         .required("Email is required"),
-      password: Yup.string()
-        .min(6, "Password must be at least 6 characters")
+      username: Yup.string()
+        .required("Username is required")
+        .max(30, "Must be 30 characters or less")
+        .min(3, "Must be 3 characters or more").required("Username is required"),
+      password1: Yup.string()
+        .min(8, "Password must be at least 8 characters")
         .required("Password is required"),
+      password2: Yup.string().oneOf([Yup.ref("password1"), ""], "Passwords must match"),
     })
     .required();
 
@@ -71,10 +73,20 @@ export default function SignUp() {
 
     resolver: yupResolver(validationSchema),
   });
-  const onSubmit = (data: signInFormData) => {
-    reset();
-    console.log(data);
-    axios.post("http://localhost:8000/accounts/signup/", data)
+  const onSubmit = async (data: signInFormData) => {
+    try {
+
+
+      const req = await axios.get("http://localhost:8000/accounts/signup/")
+      console.log(req)
+
+      const res = await axios.post("http://localhost:8000/accounts/signup/", data, { headers: { "X-CSRFToken": Cookies.get("csrftoken"), "Content-Type": "application/json" } })
+      console.log(res)
+      reset();
+    }
+    catch (error) {
+      console.log("Error", error)
+    }
 
   };
 
@@ -103,44 +115,8 @@ export default function SignUp() {
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Controller
-                  control={control}
-                  name="firstName"
-                  defaultValue=""
-                  render={({ field }) => (
-                    <TextField
-                      autoComplete="given-name"
-                      label="First Name"
-                      fullWidth
-                      id="firstName"
-                      autoFocus
-                      {...field}
-                      error={Boolean(errors.firstName)}
-                      helperText={errors.firstName?.message}
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Controller
-                  control={control}
-                  name="lastName"
-                  defaultValue=""
-                  render={({ field }) => (
-                    <TextField
-                      label="Last Name"
-                      fullWidth
-                      id="lastName"
-                      required
-                      autoComplete="family-name"
-                      {...field}
-                      error={Boolean(errors.lastName)}
-                      helperText={errors.lastName?.message}
-                    />
-                  )}
-                />
-              </Grid>
+
+
               <Grid item xs={12}>
                 <Controller
                   control={control}
@@ -161,10 +137,29 @@ export default function SignUp() {
                   )}
                 />
               </Grid>
+              <Grid item xs={12} >
+                <Controller
+                  control={control}
+                  name="username"
+                  defaultValue=""
+                  render={({ field }) => (
+                    <TextField
+                      autoComplete="username"
+                      label="Username"
+                      fullWidth
+                      id="username"
+                      autoFocus
+                      {...field}
+                      error={Boolean(errors.username)}
+                      helperText={errors.username?.message}
+                    />
+                  )}
+                />
+              </Grid>
               <Grid item xs={12}>
                 <Controller
                   control={control}
-                  name="password"
+                  name="password1"
                   defaultValue=""
                   render={({ field }) => (
                     <TextField
@@ -175,11 +170,34 @@ export default function SignUp() {
                       id="password"
                       autoComplete="new-password"
                       {...field}
-                      error={Boolean(errors.password)}
-                      helperText={errors.password?.message}
+                      error={Boolean(errors.password1)}
+                      helperText={errors.password1?.message}
                     />
                   )}
                 />
+
+              </Grid>
+              <Grid item xs={12}>
+                <Controller
+                  control={control}
+                  name="password2"
+                  defaultValue=""
+                  render={({ field }) => (
+                    <TextField
+                      required
+                      fullWidth
+                      label="Confirm Password"
+                      type="password"
+                      id="password"
+                      autoComplete="new-password"
+                      {...field}
+                      error={Boolean(errors.password2)}
+                      helperText={errors.password2?.message}
+                    />
+
+                  )}
+                />
+
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
