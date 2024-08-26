@@ -75,6 +75,8 @@ export default function SignIn() {
             <Controller
               name="email"
               control={control}
+              defaultValue=""
+
               render={({ field }) => (
                 <TextField
                   margin="normal"
@@ -92,6 +94,8 @@ export default function SignIn() {
             />
             <Controller
               name="password"
+              defaultValue=""
+
               control={control}
               render={({ field }) => (
                 <TextField

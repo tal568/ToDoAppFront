@@ -15,7 +15,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { Link as RouterLink } from 'react-router-dom';
-
+import axios, { Axios } from "axios";
 
 function Copyright(props: any) {
   return (
@@ -68,11 +68,14 @@ export default function SignUp() {
     setError,
     reset,
   } = useForm({
+
     resolver: yupResolver(validationSchema),
   });
   const onSubmit = (data: signInFormData) => {
-    console.log(data);
     reset();
+    console.log(data);
+    axios.post("http://localhost:8000/accounts/signup/", data)
+
   };
 
   return (
@@ -104,6 +107,7 @@ export default function SignUp() {
                 <Controller
                   control={control}
                   name="firstName"
+                  defaultValue=""
                   render={({ field }) => (
                     <TextField
                       autoComplete="given-name"
@@ -122,6 +126,7 @@ export default function SignUp() {
                 <Controller
                   control={control}
                   name="lastName"
+                  defaultValue=""
                   render={({ field }) => (
                     <TextField
                       label="Last Name"
@@ -140,6 +145,7 @@ export default function SignUp() {
                 <Controller
                   control={control}
                   name="email"
+                  defaultValue=""
                   render={({ field }) => (
                     <TextField
                       label="Email Address"
@@ -159,6 +165,7 @@ export default function SignUp() {
                 <Controller
                   control={control}
                   name="password"
+                  defaultValue=""
                   render={({ field }) => (
                     <TextField
                       required
