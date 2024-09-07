@@ -5,6 +5,9 @@ import NavBar from "./components/nav-bar";
 import Home from "./components/home/home";
 import NotFound from "./components/not-found";
 import React from "react";
+import RoomsListPage from "./pages/rooms";
+import RoomTasksPage from "./pages/tasks";
+
 
 const NavBarWithOutlet = () => (
   <>
@@ -30,6 +33,15 @@ const router = createBrowserRouter([
         path: "/sign-up",
         element: <SignUp />,
       },
+      {
+        path: '/rooms',  // Route for the main page to select rooms
+        element: <RoomsListPage />,
+      },
+      {
+        path: '/room/:id',  // Dynamic route for viewing tasks of a specific room
+        element: <RoomTasksPage />,
+      },
+
     ],
   },
   {
