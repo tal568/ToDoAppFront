@@ -80,7 +80,11 @@ export default function SignUp() {
       const req = await axios.get("http://localhost:8000/accounts/signup/")
       console.log(req)
 
-      const res = await axios.post("http://localhost:8000/accounts/signup/", data, { headers: { "X-CSRFToken": Cookies.get("csrftoken"), "Content-Type": "application/json" } })
+      const res = await axios.post("http://localhost:8000/accounts/signup/", data, {
+        headers: {
+          "X-CSRFToken": Cookies.get("csrftoken"), "Content-Type": "application/json"
+        }
+      })
       console.log(res)
       reset();
     }
@@ -89,6 +93,7 @@ export default function SignUp() {
     }
 
   };
+
 
   return (
     <>
