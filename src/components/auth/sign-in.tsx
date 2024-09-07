@@ -16,6 +16,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Link as RouterLink } from 'react-router-dom';
 
+import GoogleIcon from '@mui/icons-material/Google'; // Import Google icon
 
 function Copyright(props: any) {
   return (
@@ -53,6 +54,12 @@ export default function SignIn() {
     console.log(data);
   };
 
+  // Handle Google Sign-In action
+  const handleGoogleSignIn = () => {
+    console.log("Google Sign-In clicked");
+    // Add logic for Google authentication here
+  };
+
   return (
     <>
       <Container component="main" maxWidth="xs">
@@ -76,7 +83,6 @@ export default function SignIn() {
               name="email"
               control={control}
               defaultValue=""
-
               render={({ field }) => (
                 <TextField
                   margin="normal"
@@ -95,7 +101,6 @@ export default function SignIn() {
             <Controller
               name="password"
               defaultValue=""
-
               control={control}
               render={({ field }) => (
                 <TextField
@@ -124,6 +129,18 @@ export default function SignIn() {
             >
               Sign In
             </Button>
+
+            {/* Google Sign-In Button */}
+            <Button
+              fullWidth
+              variant="outlined"
+              startIcon={<GoogleIcon />} // Google icon added
+              onClick={handleGoogleSignIn}
+              sx={{ mb: 2 }}
+            >
+              Sign in with Google
+            </Button>
+
             <Grid container>
               <Grid item xs>
                 <Link component={RouterLink} to='/home' >
